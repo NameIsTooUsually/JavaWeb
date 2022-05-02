@@ -1,4 +1,4 @@
-package com.chenhao.test;
+package com.chenhao.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

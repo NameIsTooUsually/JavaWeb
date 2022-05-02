@@ -1,16 +1,16 @@
-package com.chenhao.test;
+package com.chenhao.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
 //快速入门jdbc
-public class JDBCDemo2_DriverManager {
+public class JDBCDemo1 {
     public static void main(String[] args) throws Exception {
         //1注册驱动 （可以不写）
-        //Class.forName("com.mysql.jdbc.Driver");
-        //2获取链接:如果链接的是本机mysql 并且端口是默认的3306 可以简化书写
-        String url = "jdbc:mysql:///db1?useSSL=false";
+        Class.forName("com.mysql.jdbc.Driver");
+        //2获取链接
+        String url = "jdbc:mysql://127.0.0.1:3306/db1";
         String username = "root";
         String password = "123abc.";
         Connection connection = DriverManager.getConnection(url, username, password);

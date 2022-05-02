@@ -1,4 +1,4 @@
-package com.chenhao.test;
+package com.chenhao.jdbc;
 
 import org.junit.Test;
 
