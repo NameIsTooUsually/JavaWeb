@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.sql.*;
 
-public class JDBSDemo6_UserLogin {
+public class JDBSDemo6_StuLogin {
     @Test
     public void testInject() throws SQLException {
         //创建连接

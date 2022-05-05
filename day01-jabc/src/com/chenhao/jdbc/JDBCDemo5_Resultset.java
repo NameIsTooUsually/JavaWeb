@@ -79,7 +79,7 @@ public class JDBCDemo5_Resultset {
         //执行sql
         ResultSet resultSet = statement.executeQuery(sql);
         //创建一个集合
-        ArrayList<Stu> stus = new ArrayList<>();
+        ArrayList<Stu> stuses = new ArrayList<>();
         //处理结果
         while (resultSet.next()){
             //表的一行数据
@@ -88,9 +88,9 @@ public class JDBCDemo5_Resultset {
             int age = resultSet.getInt("age");
             String gender = resultSet.getString("gender");
             //封装成一个对象
-            Stu stu = new Stu(id, name, age, gender);
+            Stu user = new Stu(id, name, age, gender);
             //存入集合中
-            stus.add(stu);
+            stuses.add(user);
     }
         //释放资源
         resultSet.close();
@@ -98,6 +98,6 @@ public class JDBCDemo5_Resultset {
         connection.close();
 
         //打印集合
-        System.out.println(stus);
+        System.out.println(stuses);
     }
 }
