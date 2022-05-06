@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+    environment：配置数据库连接环境。可以配置多个environment，通过通过default属性切换不容的environment
+    -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!--连接信息-->
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql:///mybatis?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123abc."/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--加载sql映射文件-->
+        <!--<mapper resource="com/chenhao/mapper/UserMapper.xml"/>-->
+        <!--包扫描的方式加载sql的映射文件-->
+        <package name="com.chenhao.mapper"/>
+    </mappers>
+</configuration>
