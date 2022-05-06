@@ -1,4 +1,4 @@
-package com.chenhao.homework;
+package com.chenhao.homework.test2;
 
 public class OrderDetail {
     private long id;

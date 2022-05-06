@@ -1,4 +1,4 @@
-package com.chenhao.homework;
+package com.chenhao.homework.test2;
 
 import java.util.Date;
 
