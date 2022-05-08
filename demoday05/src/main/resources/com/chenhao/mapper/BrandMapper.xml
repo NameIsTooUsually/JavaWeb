@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chenhao.mapper.BrandMapper">
+    <resultMap id="brandResult" type="com.chenhao.pojo.Brand">
+
+        <result column="brand_name" property="brandName"/>
+        <result column="company_name" property="companyName"/>
+    </resultMap>
+
+    <!--<select id="findByCondition" resultType="com.chenhao.pojo.Brand">
+        select
+        id,brand_name as brandName,company_name as companyName,ordered,description,status
+        from tb_brand where
+        status = #{status}
+        and brand_name like #{brandName}
+        and company_name like #{companyName};
+    </select>-->
+
+    <!--固定多条件查询-->
+    <!--<select id="findByCondition" resultMap="brandResult">
+    select * from tb_brand where
+        status = #{status}
+        and brand_name like #{brandName}
+        and company_name like #{companyName};
+    </select>-->
+    <!--<select id="findByCondition" resultMap="brandResult">
+    select * from tb_brand where
+        status = #{status}
+        and brand_name like #{brandName}
+        and company_name like #{companyName};
+    </select>-->
+    <!--不固定条件查询，用if标签进行判断，where标签，进行辅助 -->
+    <!--if标签中test后面跟判断条件，如果满足条件，就执行标签体中内容-->
+    <!-- <select id="findByCondition" resultMap="brandResult">
+     select * from tb_brand
+         <where>
+         <if test="status!=null">
+             status = #{status}
+         </if>
+         <if test="brandName!=null and brandName != '' ">
+             and brand_name like #{brandName}
+         </if>
+         <if test="companyName!=null and companyName != ''">
+              and company_name like #{companyName};
+         </if>
+         </where>
+     </select>-->
+
+    <!--不固定但条件查询-->
+    <select id="findByCondition" resultMap="brandResult">
+        select * from tb_brand
+        <where>
+            <choose>
+                <when test="status!=null">
+                    status = #{status}
+                </when>
+                <when test="brandName!=null and brandName != '' ">
+                    brand_name like #{brandName}
+                </when>
+                <when test="companyName!=null and companyName != ''">
+                    company_name like #{companyName}
+                </when>
+            </choose>
+        </where>
+    </select>
+    <!--添加数据-->
+    <insert id="insert">
+        insert into tb_brand
+        value (null,#{brandName},#{companyName},#{ordered},#{description},#{status})
+    </insert>
+    <!--修改数据-->
+    <!--<update id="update">
+        update tb_brand set
+            brand_name = #{brandName},
+            company_name = #{companyName},
+            ordered = #{ordered},
+            description = #{description},
+            status = #{status}
+            where
+            id = #{id}
+    </update>-->
+    <!--修改数据不定项更新-->
+    <update id="update">
+        update tb_brand
+        <set>
+            <if test="brandName!=null and brandName!=''">
+                brand_name = #{brandName},
+            </if>
+            <if test="companyName!=null and companyName!=''">
+                company_name = #{companyName},
+            </if>
+            <if test="ordered!=null">
+                ordered = #{ordered},
+            </if>
+            <if test="description!=null and description!=''">
+                description = #{description},
+            </if>
+            <if test="status!=null">
+                status = #{status}
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+    <!--删除一行-->
+    <delete id="deleteById">
+      delete from tb_brand where id = #{id}
+    </delete>
+    <!--删除多行-->
+    <delete id="deleteMulti">
+        delete from  tb_brand where id = in
+        <foreach collection="ids" item="id"  separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
