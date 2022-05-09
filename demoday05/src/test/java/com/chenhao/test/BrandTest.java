@@ -105,4 +105,11 @@ public class BrandTest {
         Integer id = 7;
         int i = brandMapper.deleteById(id);
     }
+    @Test
+    public void deleteMulti(){
+        Integer[] ids = {5,6,8,9};
+
+        int i = brandMapper.deleteMulti(ids);
+        System.out.println(i);
+    }
 }

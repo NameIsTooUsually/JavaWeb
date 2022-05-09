@@ -15,6 +15,6 @@ public interface BrandMapper {
     int insert(Brand brand);
     int update(Brand brand);
     int deleteById(Integer id);
-    int deleteMulti(Integer[] ids);
+    int deleteMulti(@Param("ids") Integer[] ids);
 
 }

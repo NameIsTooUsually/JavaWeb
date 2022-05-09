@@ -112,10 +112,10 @@
     </delete>
     <!--删除多行-->
     <delete id="deleteMulti">
-        delete from  tb_brand where id = in
-        <foreach collection="ids" item="id"  separator="," open="(" close=")">
+        delete from  tb_brand where id in(
+        <foreach collection="ids" item="id" separator="," >
             #{id}
-        </foreach>
+        </foreach>)
     </delete>
 
 </mapper>
