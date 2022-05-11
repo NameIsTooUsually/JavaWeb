@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>隔行换色</title>
+    <style>
+        table {
+            width: 50%;
+        }
+
+        th,td {
+            border-bottom: 1px #C0C0C0 solid;
+            height: 40px;
+            font-family: 楷体;
+        }
+
+        a {
+            color: #00008B;
+            text-decoration: none;
+        }
+
+        th {
+            background-color: #DEE3E6;
+        }
+
+    </style>
+</head>
+<body>
+
+    <table align="center">
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>地址</th>
+            <th>操作</th>
+        </tr>
+        <tr align="center">
+            <td>1</td>
+            <td>张三</td>
+            <td>西安</td>
+            <td><a href="javascript:void(0);">删除</a></td>
+        </tr>
+
+        <tr align="center">
+            <td>2</td>
+            <td>李四</td>
+            <td>武汉</td>
+            <td><a href="javascript:void(0);">删除</a></td>
+        </tr>
+        <tr align="center">
+            <td>3</td>
+            <td>王五</td>
+            <td>北京</td>
+            <td><a href="javascript:void(0);">删除</a></td>
+        </tr>
+        <tr align="center">
+            <td>4</td>
+            <td>赵六</td>
+            <td>上海</td>
+            <td><a href="javascript:void(0);">删除</a></td>
+        </tr>
+        <tr align="center">
+            <td>5</td>
+            <td>田七</td>
+            <td>深圳</td>
+            <td><a href="javascript:void(0);">删除</a></td>
+        </tr>
+        <tr align="center">
+            <td>6</td>
+            <td>老王</td>
+            <td>成都</td>
+            <td><a href="javascript:void(0);">删除</a></td>
+        </tr>
+    </table>
+
+    <script>
+        /*
+            数据行进行各行换色
+                奇数行颜色为 ： #fbfbfb
+                偶数行的颜色为： #e9edf2
+         */
+
+        //根据标签获取行的对象
+        var trS = document.querySelectorAll('tr');
+        for(let i = 0; i<trS.length;i++){
+            if(i%2==0){
+                trS[i].style.backgroundColor = '#e9edf2';
+            }else{
+                trS[i].style.backgroundColor = '#fbfbfb';
+            }
+        }
+		
+
+    </script>
+</body>
+</html>
