@@ -17,34 +17,41 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
-@WebServlet("/LoginDemo")
-public class LoginDemo extends HttpServlet {
+@WebServlet("/RegisterDemo")
+public class RegisterDemo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //获取用户名和密码
+        request.setCharacterEncoding("utf-8");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        //mybatis 完成查询
-        /*InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
+
+        //username = URLDecoder.decode(new String(URLEncoder.encode(username, "ISO_8859_1").getBytes()), "UTF-8");
+
+       /* InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);*/
 
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryDemo.getSqlSessionFactory();
-
         SqlSession sqlSession = sqlSessionFactory.openSession();
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        User user = mapper.validateUser(username, password);
-        sqlSession.close();
 
-        //获取对应的字符输出流，并设置contenttupe
+        User user = new User();
+        user.setPassword(password);
+        user.setUsername(username);
+
+        User user1 = mapper.selectByUserName(username);
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
-        if(user!=null){
-            writer.write(username+"你好");
+        if(user1==null){
+            mapper.updateUser(user);
+            sqlSession.commit();
+            sqlSession.close();
+            writer.write(username+" 恭喜你注册成功成功");
         }else{
-            writer.write("用户名或者密码不匹配<br><a href='http://localhost/baidu' target='_blank'>登录</a>");
+
+            writer.write("用户名已存在");
         }
     }
 }

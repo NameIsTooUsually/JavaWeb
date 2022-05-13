@@ -18,4 +18,20 @@ public class Test {
         User user = mapper.validateUser("zhangsan", "123");
         System.out.println(user);
     }
+
+    @org.junit.Test
+    public void Testupdate() throws IOException {
+        //创建一个对象
+        User user = new User();
+        user.setPassword("458");
+        user.setUsername("牛牛");
+
+        InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        int i = mapper.updateUser(user);
+        sqlSession.commit();
+        System.out.println(i);
+    }
 }
