@@ -14,6 +14,7 @@
 </head>
 <body>
 
+<h1>${user.username}欢迎您！</h1>
 <td><input type="button" value="新增" id="add"><br>
 <table border="1" cellspacing="0" width="80%">
     <tr>
@@ -41,8 +42,8 @@
                 <td>禁用</td>
             </c:if>
 
-        <td><a href="/brandDemo/SelectByIdServlet?id=${brand.id}">修改</a>
-            <a href="/brandDemo//DeleteServlet?id=${brand.id}">删除</a></td>
+        <td><a href="/brandDemo/ServletDemo?method=selectByid&id=${brand.id}">修改</a>
+            <a href="/brandDemo/ServletDemo?method=delete&id=${brand.id}">删除</a></td>
 
     </tr>
        </c:forEach>

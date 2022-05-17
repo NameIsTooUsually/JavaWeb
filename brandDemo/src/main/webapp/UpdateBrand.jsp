@@ -13,7 +13,7 @@
 </head>
 <body>
 <h3>添加品牌</h3>
-<form action="/brandDemo/UpdateServlet" method="post">
+<form action="/brandDemo/ServletDemo?method=update" method="post">
     <input type="hidden" name="id" value="${brand.id}">
 
     品牌名称：<input name="brandName" value="${brand.brandName}"><br>
