@@ -7,6 +7,49 @@
         <result column="brand_name" property="brandName"/>
         <result column="company_name" property="companyName"/>
     </resultMap>
+    <!--批量删除-->
+    <delete id="deleteByIds">
+        delete from tb_brand
+        <where>
+            id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+
+    </delete>
+
+    <!--根据条件查询数据-->
+    <select id="selectByPageAndCondition" resultMap="BrandMap">
+        select * from tb_brand
+        <where>
+            <if test="brand.brandName !=null and brand.brandName !=''">
+                and brand_name like #{brand.brandName}
+            </if>
+            <if test="brand.companyName !=null and brand.companyName !=''">
+                and company_name like #{brand.companyName}
+            </if>
+            <if test="brand.status !=null">
+                and status = #{brand.status}
+            </if>
+        </where>
+        limit #{begin},#{size};
+    </select>
+    <select id="selectTotalByPageAndCondition" resultType="java.lang.Integer">
+        <!--根据条件查询总数-->
+
+        select count(*) from tb_brand
+        <where><if test="brandName !=null and brandName !=''">
+            and brand_name like #{brandName}
+        </if>
+            <if test="companyName !=null and companyName !=''">
+                and company_name like #{companyName}
+            </if>
+            <if test="status !=null">
+                and status = #{status}
+            </if></where>
+    </select>
+
 
 
 </mapper>

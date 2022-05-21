@@ -41,17 +41,18 @@
     </el-form>
 
 
-    <el-button type="danger" plain>批量删除</el-button>
+    <el-button type="danger" @click="deleteByIds" plain>批量删除</el-button>
     <el-button type="primary" @click="dialogVisible = true" plain>新增</el-button>
 
     <!--表格-->
-    <template>
+    <template >
 
         <el-table
                 :data="tableData"
                 style="width: 100%"
-                :row-class-name="tableRowClassName">
+                :row-class-name="tableRowClassName"
                 @selection-change="handleSelectionChange"
+                :model="brand">
             <el-table-column
                     type="selection"
                     width="55"
@@ -85,15 +86,16 @@
             <el-table-column
                     prop="status"
                     label="当前状态"
-
                     align="center">
             </el-table-column>
 
             </el-table-column>
+
             <el-table-column label="操作"
-                             align="center">
-                <el-button type="primary">修改</el-button>
-                <el-button type="danger">删除</el-button>
+                             align="center"
+                             prop="id">
+                <el-button type="primary" @click="" plain>修改</el-button>
+                <el-button type="danger"  @click="" plain>删除</el-button>
             </el-table-column>
 
 
@@ -104,10 +106,10 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
+                :page-sizes="[5, 10, 15, 20]"
                 :page-size="100"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalCount">
         </el-pagination>
 
         <!--弹出窗-->
@@ -143,7 +145,7 @@
 
 
                 <el-form-item>
-                    <el-button type="primary" @click="addBrand" >提交</el-button>
+                    <el-button type="primary" @click="addBrand">提交</el-button>
                     <el-button @click="dialogVisible = false">取消</el-button>
                 </el-form-item>
             </el-form>
@@ -166,18 +168,22 @@
     new Vue({
         el: "#app",
 
-        mounted(){
-            this.selectAll();
+        mounted() {
+            this.selectByPage();
 
         },
 
         data() {
             return {
+                //总页数
+                totalCount: 1,
                 // 添加数据对话框是否展示的标记
                 dialogVisible: false,
-
-                currentPage: 4,
-
+                //当前页数
+                currentPage: 1,
+                //每页展示数
+                pageSize: 5,
+                //品牌
                 brand: {
                     id: '',
                     brandName: '',
@@ -186,57 +192,169 @@
                     description: '',
                     status: '',
                 },
+                //表格展示的数据集合
+                tableData: [],
 
-                tableData: []
+                // 复选框选中数据集合
+                multipleSelection: [],
+
+                //选中的id集合
+                selectIDs: []
             }
         },
         methods: {
 
-            selectAll(){
+
+            //单个删除
+            deleteById() {
+                alert();
+                //确认是否删除的操作
+                this.$confirm('此操作将删除该数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //删除操作
+
+                    //将复选框选择的数据放入集合中
+
+
+                    //根据id进行删除
+                    var _this = this;
+                    //发起异步请求
+                    axios({
+                        method: "post",
+                        url: "http://localhost/brand/deleteByIds",
+                        data: _this.selectIDs
+                    }).then(function (response) {
+                        //删除成功
+                        if (response.data == "success") {
+                            //显示数据
+                            _this.selectAll();
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        }
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+
+            //批量删除
+            deleteByIds() {
+                //确认是否删除的操作
+                this.$confirm('此操作将删除该数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //删除操作
+
+                    //将复选框选择的数据放入集合中
+                    for (let i = 0; i < this.multipleSelection.length; i++) {
+                        let selectElement = this.multipleSelection[i];
+                        this.selectIDs[i] = selectElement.id;
+                    }
+
+                    //根据id进行删除
+                    var _this = this;
+                    //发起异步请求
+                    axios({
+                        method: "post",
+                        url: "http://localhost/brand/deleteByIds",
+                        data: _this.selectIDs
+                    }).then(function (response) {
+                        //删除成功
+                        if (response.data == "success") {
+                            //显示数据
+                            _this.selectAll();
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                        }
+                    })
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+
+            //查询所有
+            selectByPage() {
+                //加载数据,执行一个异步请求
+                var _this = this;
+
+                axios({
+                    method: "post",
+                    url: "http://localhost/brand/selectByPageAndCondition?currentPage=" + _this.currentPage + "&pageSize=" + _this.pageSize,
+                    data: this.brand
+                }).then(function (response) {
+                    //获取到一个PageBean数据[row:{},totalCount]
+                    _this.tableData = response.data.row;
+                    _this.totalCount = response.data.totalCount;
+                })
+            },
+            //查询所有
+            selectAll() {
                 //加载数据,执行一个异步请求
                 var _this = this;
                 axios({
-                    method:"get",
-                    url:"http://localhost/SelectServlet"
+                    method: "get",
+                    url: "http://localhost/brand/selectAll"
                 }).then(function (response) {
                     _this.tableData = response.data;
                 })
             },
+
+
             // 复选框选中后执行的方法
             handleSelectionChange(val) {
                 this.multipleSelection = val;
-
-                console.log(this.multipleSelection)
+                //console.log(this.multipleSelection);
             },
+
+
             // 添加数据
             addBrand() {
                 var _this = this;
                 //发起异步请求
                 axios({
-                    method:"post",
-                    url:"http://localhost/AddServlet",
-                    data:_this.brand
+                    method: "post",
+                    url: "http://localhost/brand/add",
+                    data: _this.brand
                 }).then(function (response) {
                     //添加成功
-                    if(response.data=="success"){
+                    if (response.data == "success") {
                         //显示数据
                         _this.selectAll();
-                        _this.open2();
+                        _this.$message({
+                            message: '恭喜你，添加成功',
+                            type: 'success'
+                        });
+
+                        //关闭窗口
                         _this.dialogVisible = false;
 
                     }
                 })
             },
             //提示消息
-            open2() {
-                this.$message({
-                    message: '恭喜你，这是一条成功消息',
-                    type: 'success'
-                });
-            },
+
 
             onSubmit() {
-                console.log('submit!');
+                console.log(this.brand);
+                this.selectByPage()
+
             },
 
             tableRowClassName({row, rowIndex}) {
@@ -249,12 +367,17 @@
             },
 
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                //console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+                this.selectByPage();
             },
             handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+                this.currentPage = val;
+                this.selectByPage();
+
+                //console.log(`当前页: ${val}`);
             }
-        },
+        }
 
     })
 
