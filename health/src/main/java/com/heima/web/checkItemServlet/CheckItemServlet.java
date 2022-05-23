@@ -1,12 +1,11 @@
-package com.heima.web.servlet;
+package com.heima.web.checkItemServlet;
 
 import com.alibaba.fastjson.JSON;
-import com.heima.pojo.Page;
+import com.heima.pojo.QueryDTO;
 import com.heima.pojo.PageBeanResult;
-import com.heima.service.UserService;
-import com.heima.service.impl.UserServiceImpl;
+import com.heima.service.CheckItemService;
+import com.heima.service.impl.CheckItemServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,26 +14,24 @@ import java.io.IOException;
 
 @WebServlet("/checkitem/findPage.do")
 public class CheckItemServlet extends HttpServlet {
-    UserService userService = new UserServiceImpl();
-
+    CheckItemService checkItemService = new CheckItemServiceImpl();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         this.doGet(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws  IOException {
         //设置编码
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/json;charset=utf-8");
         //获取参数
-        Page pageJson = JSON.parseObject(request.getReader().readLine(), Page.class);
-        int currentPage = pageJson.getCurrentPage();
-        int pageSize = pageJson.getPageSize();
+        QueryDTO queryDTOJson = JSON.parseObject(request.getReader().readLine(), QueryDTO.class);
+
 
         //调用方法
-        PageBeanResult pageBeanResult = userService.selectByPage(currentPage, pageSize);
+        PageBeanResult pageBeanResult = checkItemService.selectByPage(queryDTOJson);
         pageBeanResult.setFlag(true);
         pageBeanResult.setMessage("成功");
 

@@ -1,4 +1,4 @@
-package com.heima.web.servlet;
+package com.heima.web.userServlet;
 
 import com.heima.pojo.User;
 import com.heima.service.UserService;

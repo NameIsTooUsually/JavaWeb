@@ -1,21 +1,23 @@
-package com.heima.web.servlet;
+package com.heima.web.checkItemServlet;
 
 import com.alibaba.fastjson.JSON;
+import com.heima.pojo.CheckItem;
 import com.heima.pojo.Result;
-import com.heima.pojo.User;
+import com.heima.service.CheckItemService;
+import com.heima.service.impl.CheckItemServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/user/getUsername.do")
-public class UserServlet extends HttpServlet {
+@WebServlet("/checkitem/findAll.do")
+public class FindAllServlet extends HttpServlet {
+    CheckItemService checkItemService = new CheckItemServiceImpl();
 
-    //获取用户名信息，用户登录成功后，在session中存储了user对象，从中获取即可
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
@@ -24,16 +26,21 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //设置编码
+        request.setCharacterEncoding("utf-8");
         response.setContentType("text/json;charset=utf-8");
-        //获取session对象
-        HttpSession session = request.getSession();
-        //获取用户对象
-        User user = (User) session.getAttribute("user");
 
-        //创建result对象  {"flag":true,"message":"获取当前登录用户名称成功","data":"admin"}
-        Result result = new Result(true,"获取当前登录用户名称成功",user.getUsername());
+        //调用方法
+        List<CheckItem> items = checkItemService.findAll();
+        String s = JSON.toJSONString(items);
 
-        //响应
+        //创建result对象
+        Result result = new Result();
+        result.setData(s);
+        result.setFlag(true);
+        result.setMessage("查询检查项成功");
+
+        //转换成JSON字符串
         response.getWriter().write(JSON.toJSONString(result));
+
     }
 }

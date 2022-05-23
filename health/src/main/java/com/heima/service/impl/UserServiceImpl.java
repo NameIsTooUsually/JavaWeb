@@ -12,6 +12,7 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
+
     @Override
     public User login(String username,String password) {
         //获取SQLSession对象
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
+   /* @Override
     public PageBeanResult selectByPage(int currentPage, int pageSize) {
         //获取SQLSession对象
         SqlSession sqlSession = MyBatisConfigUtils.getSqlSession();
@@ -52,9 +53,9 @@ public class UserServiceImpl implements UserService {
         sqlSession.close();
 
         return pageBeanResult;
-    }
+    }*/
 
-    @Override
+   /* @Override
     public CheckItem findById(int id) {
         //获取SQLSession对象
         SqlSession sqlSession = MyBatisConfigUtils.getSqlSession();
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public int deleteById(int id) {
         //获取SQLSession对象
         SqlSession sqlSession = MyBatisConfigUtils.getSqlSession();
 
@@ -95,12 +96,34 @@ public class UserServiceImpl implements UserService {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
         //调用方法
-        userMapper.deleteById(id);
+        int i = userMapper.deleteById(id);
 
         //提交事务
         sqlSession.commit();
 
         //释放资源
         sqlSession.close();
+
+        return i;
     }
+
+    @Override
+    public int updateByOBJ(CheckItem checkItem) {
+        //获取SQLSession对象
+        SqlSession sqlSession = MyBatisConfigUtils.getSqlSession();
+
+        //获取映射对象
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        //调用方法
+        int i = userMapper.updateByOBJ(checkItem);
+
+        //提交事务
+        sqlSession.commit();
+
+        //释放资源
+        sqlSession.close();
+
+        return i;
+    }*/
 }

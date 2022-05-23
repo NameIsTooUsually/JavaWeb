@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Page {
+public class QueryDTO {
+
     private int currentPage;
     private int pageSize;
     private String queryString;
+
 }
