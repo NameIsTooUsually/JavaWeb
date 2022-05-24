@@ -31,16 +31,21 @@ public class CheckItemServiceImpl implements CheckItemService {
 
         int begin = (queryDTO.getCurrentPage() - 1) * queryDTO.getPageSize();
 
-        if (total <= begin) {
+        if (total < begin) {
+
+
             //计算分页起始编码
-            int temp = total/ queryDTO.getPageSize();
-            if(temp==0){
+            int temp = total / queryDTO.getPageSize();
+            if (temp == 0) {
                 queryDTO.setCurrentPage(temp);
-            }else{
-                queryDTO.setCurrentPage((temp-1)* queryDTO.getPageSize());
+            } else {
+                queryDTO.setCurrentPage((temp) * queryDTO.getPageSize());
             }
-        }else{
-            queryDTO.setCurrentPage((queryDTO.getCurrentPage()-1)* queryDTO.getPageSize());
+        } else if (total == begin) {
+            int temp = total / queryDTO.getPageSize();
+            queryDTO.setCurrentPage((temp - 1) * queryDTO.getPageSize());
+        } else {
+            queryDTO.setCurrentPage((queryDTO.getCurrentPage() - 1) * queryDTO.getPageSize());
         }
 
 

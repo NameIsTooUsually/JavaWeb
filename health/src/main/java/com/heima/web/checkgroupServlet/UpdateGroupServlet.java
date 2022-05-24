@@ -13,8 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/checkgroup/add.do")
-public class AddGroupServlet extends HttpServlet {
+@WebServlet("/checkgroup/findById.do")
+public class UpdateGroupServlet extends HttpServlet {
+    CheckGroupService checkGroupService = new CheckGroupServiceImpl();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
@@ -26,39 +27,22 @@ public class AddGroupServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/json;charset=utf-8");
         //获取参数
+        String checkGroupId = request.getParameter("id");
 
-        CheckGroup checkGroup = JSON.parseObject(request.getReader().readLine(), CheckGroup.class);
-        String _id = request.getParameter("checkitemIds");
-
-        if(!(_id!=null && _id!="")){
-            return;
-        }
-
-        String[] split = _id.split(",");
-        int[] ids = new int[split.length];
-        for (int i = 0; i < split.length; i++) {
-            ids[i] = Integer.parseInt(split[i]);
-        }
-
-        //创建对象
-        CheckGroupService checkGroupService = new CheckGroupServiceImpl();
         //调用方法
-        boolean _result = checkGroupService.addGroup(checkGroup,ids);
-
-        //创建响应数据
-        Result result = new Result();
-        if(_result){
-            //添加成功
-            result.setMessage("新增检查组成功");
+        CheckGroup checkGroup = checkGroupService.findById(Integer.parseInt(checkGroupId));
+        Result<CheckGroup> result = new Result<>();
+        if(checkGroup!=null){
+            //查询成功
             result.setFlag(true);
+            result.setData(checkGroup);
         }else{
-            result.setMessage("新增检查失败");
+            //查询失败
             result.setFlag(false);
+            result.setMessage("查询检查组失败");
         }
 
         //设置响应
         response.getWriter().write(JSON.toJSONString(result));
-
     }
-
 }

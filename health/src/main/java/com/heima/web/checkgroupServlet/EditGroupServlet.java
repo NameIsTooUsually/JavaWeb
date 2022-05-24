@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/checkgroup/add.do")
-public class AddGroupServlet extends HttpServlet {
+@WebServlet("/checkgroup/edit.do")
+public class EditGroupServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doGet(request, response);
@@ -30,11 +30,13 @@ public class AddGroupServlet extends HttpServlet {
         CheckGroup checkGroup = JSON.parseObject(request.getReader().readLine(), CheckGroup.class);
         String _id = request.getParameter("checkitemIds");
 
+        //判断_id 字符串是否为空
         if(!(_id!=null && _id!="")){
             return;
         }
-
+        //对字符串进行切割，拿到id数组
         String[] split = _id.split(",");
+        //将字符串数据转换成int数组
         int[] ids = new int[split.length];
         for (int i = 0; i < split.length; i++) {
             ids[i] = Integer.parseInt(split[i]);
@@ -43,7 +45,7 @@ public class AddGroupServlet extends HttpServlet {
         //创建对象
         CheckGroupService checkGroupService = new CheckGroupServiceImpl();
         //调用方法
-        boolean _result = checkGroupService.addGroup(checkGroup,ids);
+        boolean _result = checkGroupService.editCheckGroup(checkGroup,ids);
 
         //创建响应数据
         Result result = new Result();
