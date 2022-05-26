@@ -2,6 +2,7 @@ package com.heima.mapper;
 
 import com.heima.pojo.CheckGroup;
 import com.heima.pojo.QueryDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -34,4 +35,14 @@ public interface CheckGroupMapper {
 
     //修改checkGroup数据
     int updateByCheckGroupOBj(CheckGroup checkGroup);
+
+    //获取所有
+    @Select("select * from t_checkgroup")
+    List<CheckGroup> findAll();
+
+    //根据CheckGroup 的id 进行批量删除
+    int deleteMidByCheckGroupId(int id);
+
+    @Delete("delete from t_checkgroup where id = #{id}")
+    int deleteByCheckGroupId(int id);
 }
